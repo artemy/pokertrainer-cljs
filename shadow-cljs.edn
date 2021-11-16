@@ -1,0 +1,16 @@
+{:source-paths ["src", "test"]
+
+ :dev-http     {3000 "public"}
+ :nrepl        {:port 9000}
+ :dependencies [[reagent "1.0.0"]]
+
+ :builds       {:app
+                {:target     :browser
+                 :output-dir "public/scripts/"
+                 :asset-path "/scripts/"
+                 :modules    {:core {:init-fn com.github.artemy.pokertrainer.core/run}}
+                 :js-options {:force-library-injection #{"es6/util/makeiterator"}}}
+                :test
+                {:target    :node-test
+                 :output-to "out/node-tests.js"
+                 :autorun   true}}}

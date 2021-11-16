@@ -1,0 +1,19 @@
+.card {
+    display: inline-block;
+    height: 6em;
+    width: 4em;
+    border-radius: .3em;
+    padding: .3em;
+}
+
+.rank {
+    display: block;
+    font-weight: bold;
+    text-align: left;
+}
+
+.suit {
+    font-size: 2em;
+    display: block;
+    text-align: center;
+}

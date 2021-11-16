@@ -1,0 +1,6 @@
+.idea
+node_modules
+out
+target
+.shadow-cljs
+public/scripts
