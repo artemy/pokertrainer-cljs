@@ -44,7 +44,7 @@
 
 (defn card-component [card]
   [:div {:class ["card" "m-2"]}
-   [:div {:class "rank"} (rank-to-name (:rank card))]
+   [:div {:class "rank"} (-> card rank-to-name :rank)]
    [:div {:class "suit"} (:suit card)]])
 
 (defn cards-component [cards]

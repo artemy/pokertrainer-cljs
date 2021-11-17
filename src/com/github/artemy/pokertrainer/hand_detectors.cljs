@@ -23,14 +23,14 @@
   (some #(< 1 (count %)) (find-groups-by-rank-with-size cards size)))
 
 (defn count-pairs [cards]
-  (count (find-groups-by-rank-with-size cards 2)))
+  (-> cards (find-groups-by-rank-with-size 2) count))
 
 ;-- analyzers
 (defn royal-flush?
   [cards]
   (and
     (straight-flush? cards)
-    (= 10 (:rank (first (sort-by-rank cards))))))
+    (-> cards sort-by-rank first :rank (= 10))))
 
 (defn straight-flush?
   [cards]
@@ -50,15 +50,15 @@
 
 (defn d-flush?
   [cards]
-  (some #(<= 5 (count %)) (vals (group-by-suit cards))))
+  (some #(<= 5 (count %)) (-> cards group-by-suit vals)))
 
 (defn straight?
   [cards]
-  (let [sorted-ranks (reverse (distinct (map :rank (sort-by-rank cards))))
+  (let [sorted-ranks (-> (map :rank (sort-by-rank cards)) reverse distinct)
         cycled-sorted-ranks (take (+ 1 (count sorted-ranks)) (cycle sorted-ranks))
         all-permutations-of-sorted-ranks (partition 5 1 cycled-sorted-ranks)
-        calculate-differences (fn [m] (map (fn [[i j]] (- i j)) (partition 2 1 m)))
-        allowed-difference? (fn [d] (every? (fn [diff] (or (= 1 diff) (= -12 diff))) d))]
+        calculate-differences #(map (fn [[i j]] (- i j)) (partition 2 1 %))
+        allowed-difference? #(every? (fn [diff] (or (= 1 diff) (= -12 diff))) %)]
     (some allowed-difference? (map calculate-differences all-permutations-of-sorted-ranks))))
 
 (defn three-of-a-kind?
@@ -67,14 +67,14 @@
 
 (defn two-pairs?
   [cards]
-  (<= 2 (count-pairs cards)))
+  (-> cards count-pairs (>= 2)))
 
 (defn pair?
   [cards]
-  (= 1 (count-pairs cards)))
+  (-> cards count-pairs (= 1)))
 
 (defn high-card?
-  [ignore] true)
+  [_] true)
 
 (def hand-analyzers
   (array-map :royalFlush royal-flush?
@@ -92,8 +92,3 @@
   [cards]
   (first (for [[k v] hand-analyzers
                :when (v cards)] k)))
-
-(defn correct-answer?
-  [answer cards]
-  (let [correct-answer (compute-correct-answer cards)]
-    (= answer correct-answer)))
