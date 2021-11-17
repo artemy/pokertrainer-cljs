@@ -67,7 +67,7 @@
 
 (defn two-pairs?
   [cards]
-  (= 2 (count-pairs cards)))
+  (<= 2 (count-pairs cards)))
 
 (defn pair?
   [cards]

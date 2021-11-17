@@ -115,6 +115,17 @@
         expected :twoPairs]
     (is (= expected (compute-correct-answer cards)))))
 
+(deftest three-pairs-test
+  "Three pairs combination does not exist, it's still two pairs"
+  (let [cards [{:rank 13 :suit "♦️"}
+               {:rank 13 :suit "♣️"}
+               {:rank 12 :suit "♥️"}
+               {:rank 12 :suit "♠️"}
+               {:rank 11 :suit "♦️"}
+               {:rank 11 :suit "♥️"}]
+        expected :twoPairs]
+    (is (= expected (compute-correct-answer cards)))))
+
 (deftest pair-test
   (let [cards [{:rank 14 :suit "♣️"}
                {:rank 14 :suit "♥️"}
