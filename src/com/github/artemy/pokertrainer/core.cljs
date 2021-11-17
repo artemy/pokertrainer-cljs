@@ -33,65 +33,66 @@
       (reset! cards (pick-random-cards)))))
 
 ;-- Components
-(defn card-component [card]
-  [:> Col {:md 1 :class "g-1"}
-   [:div.card
-    [:div.rank (rank-to-name (:rank card))]
-    [:div.suit (:suit card)]]])
-
-(defn cards-component [cards]
-  [:> Row {:class "cards justify-content-center"}
-   (for [card cards]
-     ^{:key (str (:rank card) (:suit card))} [card-component card])])
-
-(defn answer-buttons-component []
-  [:> Row {:class "answer-buttons"}
-   (doall
-     (for [[k v] hands]
-       ^{:key k} [:> Col {:class "d-grid g-1"}
-                  [:> Button {:variant  "secondary"
-                              :size     "sm"
-                              :title    (:description v)
-                              :disabled (= @status "game-over")
-                              :on-click #(submit-answer k)} (:name v)]]))])
-
 (defn game-info-component []
   [:<>
    [:> Col {:md 3}
-    [:h5 "Points: " @points " Turns left: " (- 10 @turns)]]
+    [:span {:class ["align-middle" "h5"]} "Points: " @points " Turns left: " (- 10 @turns)]]
    [:> Col {:md 2}
     [:> Button
      {:variant "secondary" :size "sm" :on-click reset-game}
      "Restart game"]]])
 
+(defn card-component [card]
+  [:div {:class ["card" "m-2"]}
+   [:div {:class "rank"} (rank-to-name (:rank card))]
+   [:div {:class "suit"} (:suit card)]])
+
+(defn cards-component [cards]
+  [:div {:class ["cards" "d-flex" "justify-content-center" "align-items-center"]}
+   (for [card cards]
+     ^{:key (str (:rank card) (:suit card))} [card-component card])])
+
+(defn answer-buttons-component []
+  [:div {:class ["answer-buttons" "d-flex" "flex-wrap" "justify-content-center" "align-items-center" "gap-1"]}
+   (doall
+     (for [[k v] hands]
+       ^{:key k}
+       [:> Button {:variant  "secondary"
+                   :size     "sm"
+                   :title    (:description v)
+                   :disabled (= @status "game-over")
+                   :on-click #(submit-answer k)} (:name v)]))])
+
 (defn modal-component []
-  [:> Modal {:show (= "game-over" @status) :onHide reset-game}
+  [:> Modal {:show (= "game-over" @status) :size "lg" :onHide reset-game}
    [:> Modal.Header {:closeButton "true"}
     [:> Modal.Title "Game over"]]
    [:> Modal.Body
     [:> Container
-     [:> Row
-      [:> Col "Your score: " @points]]
-     [:> Row
-      [:> Col "Correct answers: " (count (filter #(= (:correct-answer %) (:answer %)) @moves)) "/" (count @moves)]]
-     (for [move @moves] ^{:key (:cards move)} [:> Row
-                                               [:> Col {:md 10}
-                                                [cards-component (:cards move)]]
-                                               [:> Col {:md 2}
-                                                [:span {:class (if (= (:correct-answer move) (:answer move)) "text-success" "text-danger")} (:name ((:correct-answer move) hands))]
-                                                ]])]]
+     [:> Row {:class ["justify-content-center" "align-items-center"]}
+      [:> Col {:md 3} "Your score: " @points]
+      [:> Col {:md 3} "Correct answers: " (count (filter #(= (:correct-answer %) (:answer %)) @moves)) "/" (count @moves)]]
+     (for [move @moves]
+       ^{:key (:cards move)}
+       [:> Row {:class "align-items-center"}
+        [:> Col {:md 10}
+         [cards-component (:cards move)]]
+        [:> Col {:md 2}
+         [:span {:class (if (= (:correct-answer move) (:answer move)) "text-success" "text-danger")}
+          (:name ((:correct-answer move) hands))]
+         ]])]]
    [:> Modal.Footer
     [:> Button {:variant "primary" :onClick reset-game} "Restart game"]]])
 
 (defn app []
   [:<>
    [:> Container
-    [:> Row {:class "justify-content-center game-info"}
+    [:> Row {:class ["justify-content-center" "game-info" "m-1"]}
      (game-info-component)]
-    [:> Row
+    [:> Row {:class "m-1"}
      [:> Col (cards-component @cards)]]
-    [:> Row {:class "justify-content-center"}
-     [:> Col (answer-buttons-component)]]]
+    [:> Row {:class ["justify-content-center" "m-1"]}
+     [:> Col {:md "6"} (answer-buttons-component)]]]
    (modal-component)
    ])
 
