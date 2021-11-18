@@ -1,18 +1,19 @@
-.card {
+.playing-card {
     display: block;
-    height: 6vw;
-    width: 4vw;
-    border-radius: .3em;
     padding: .3em;
+    border-radius: .3em;
+    border: 1px solid rgba(0, 0, 0, .125);
+    aspect-ratio: 4/6;
+    min-width: 4vw;
 }
 
 .rank {
     font-weight: bold;
     text-align: left;
-    font-size: 90%;
+    font-size: calc(10px + 1vh);
 }
 
 .suit {
-    font-size: 150%;
+    font-size: calc(20px + 1vh);
     text-align: center;
 }
