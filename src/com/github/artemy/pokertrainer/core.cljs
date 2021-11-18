@@ -34,31 +34,30 @@
 
 ;-- Components
 (defn game-info-component []
-  [:<>
-   [:> Col {:md 3}
+  [:div {:class ["d-flex" "justify-content-center"]}
+   [:div {:class "m-1"}
     [:span {:class ["align-middle" "h5"]} "Points: " @points " Turns left: " (- 10 @turns)]]
-   [:> Col {:md 2}
+   [:div {:class "m-1"}
     [:> Button
-     {:variant "secondary" :size "sm" :on-click reset-game}
+     {:variant "danger" :size "sm" :on-click reset-game}
      "Restart game"]]])
 
 (defn card-component [card]
-  [:div {:class ["card" "m-2"]}
+  [:div {:class ["playing-card" "m-2"]}
    [:div {:class "rank"} (-> card :rank rank-to-name)]
    [:div {:class "suit"} (:suit card)]])
 
 (defn cards-component [cards]
-  [:div {:class ["cards" "d-flex" "justify-content-center" "align-items-center"]}
+  [:div {:class ["cards" "d-flex" "flex-wrap" "justify-content-center"]}
    (for [card cards]
      ^{:key (str (:rank card) (:suit card))} [card-component card])])
 
 (defn answer-buttons-component []
-  [:div {:class ["answer-buttons" "d-flex" "flex-wrap" "justify-content-center" "align-items-center" "gap-1"]}
+  [:div {:class ["answer-buttons" "d-flex" "flex-wrap" "justify-content-center" "gap-1"]}
    (doall
      (for [[k v] hands]
        ^{:key k}
        [:> Button {:variant  "secondary"
-                   :size     "sm"
                    :title    (:description v)
                    :disabled (= @status "game-over")
                    :on-click #(submit-answer k)} (:name v)]))])
