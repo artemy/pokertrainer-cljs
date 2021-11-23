@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [reagent.dom :as rdom]
             [react-bootstrap :refer [Button Col Container Modal Modal.Body Modal.Footer Modal.Header Modal.Title Row]]
-            [com.github.artemy.pokertrainer.game :refer [hands pick-random-cards poker-deck rank-to-name]]
+            [com.github.artemy.pokertrainer.game :refer [hands pick-random-cards rank-to-name]]
             [com.github.artemy.pokertrainer.hand-detectors :refer [compute-correct-answer]]))
 
 ;-- State
@@ -22,12 +22,12 @@
 
 (defn submit-answer [answer]
   (print @status)
-  (if (not= @status "game-over")
+  (when (not= @status "game-over")
     (let [correct-answer (compute-correct-answer @cards)]
       (swap! turns inc)
-      (if (>= @turns 10)
+      (when (>= @turns 10)
         (reset! status "game-over"))
-      (if (= correct-answer answer)
+      (when (= correct-answer answer)
         (swap! points inc))
       (swap! moves #(conj % {:cards @cards :correct-answer correct-answer :answer answer}))
       (reset! cards (pick-random-cards)))))
@@ -70,7 +70,7 @@
     [:> Container
      [:> Row {:class ["justify-content-center" "align-items-center"]}
       [:> Col {:md 3} "Your score: " @points]
-      [:> Col {:md 3} "Correct answers: " (count (filter #(= (:correct-answer %) (:answer %)) @moves)) "/" (count @moves)]]
+      [:> Col {:md 3} "Correct answers: " (->> @moves (filter #(= (:correct-answer %) (:answer %))) count) "/" (count @moves)]]
      (for [move @moves]
        ^{:key (:cards move)}
        [:> Row {:class "align-items-center"}

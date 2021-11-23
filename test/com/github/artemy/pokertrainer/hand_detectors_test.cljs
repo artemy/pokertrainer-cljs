@@ -1,5 +1,5 @@
 (ns com.github.artemy.pokertrainer.hand-detectors-test
-  (:require [cljs.test :refer [deftest is run-tests]]
+  (:require [cljs.test :refer [deftest is]]
             [com.github.artemy.pokertrainer.hand-detectors :refer [compute-correct-answer]]))
 
 (deftest royal-flush-test
@@ -39,7 +39,7 @@
     (is (= expected (compute-correct-answer cards)))))
 
 (deftest full-house-edge-case-test
-  "Should not detect pairs in three cards"
+  ; Should not detect pairs in three cards
   (let [cards [{:rank 14 :suit "♣️"}
                {:rank 14 :suit "♥️"}
                {:rank 14 :suit "♠️"}
@@ -88,12 +88,12 @@
 
 (deftest straight-test-edge-case
   (let [cards [{:rank 14, :suit "♠️"}
-                {:rank 8 :suit "♣️"}
-                {:rank 13 :suit "♠️"}
-                {:rank 3 :suit "♠️"}
-                {:rank 2 :suit "♥️"}
-                {:rank 2 :suit "♣️"}
-                {:rank 12 :suit "♦️"}]
+               {:rank 8 :suit "♣️"}
+               {:rank 13 :suit "♠️"}
+               {:rank 3 :suit "♠️"}
+               {:rank 2 :suit "♥️"}
+               {:rank 2 :suit "♣️"}
+               {:rank 12 :suit "♦️"}]
         expected :straight]
     (is (not= expected (compute-correct-answer cards)))))
 
@@ -116,7 +116,7 @@
     (is (= expected (compute-correct-answer cards)))))
 
 (deftest three-pairs-test
-  "Three pairs combination does not exist, it's still two pairs"
+  ; Three pairs combination does not exist, it's still two pairs
   (let [cards [{:rank 13 :suit "♦️"}
                {:rank 13 :suit "♣️"}
                {:rank 12 :suit "♥️"}
