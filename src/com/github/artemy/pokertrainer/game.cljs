@@ -4,7 +4,7 @@
 (def suits ["♥️" "♠️" "♣️" "♦️"])
 (def poker-deck (for [r ranks s suits] {:rank r :suit s}))
 
-(defn pick-random-cards [] (doall (take 7 (shuffle poker-deck))))
+(defn pick-random-cards [] (->> poker-deck shuffle (take 7)))
 
 (defn rank-to-name [rank]
   (case rank

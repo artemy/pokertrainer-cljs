@@ -1,5 +1,5 @@
 (ns com.github.artemy.pokertrainer.game-test
-  (:require [cljs.test :refer [deftest is run-tests]]
+  (:require [cljs.test :refer [deftest is]]
             [com.github.artemy.pokertrainer.game :refer [poker-deck rank-to-name]]))
 
 (deftest cards-creation
